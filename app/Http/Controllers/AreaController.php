@@ -6,6 +6,9 @@ use App\Area;
 use App\Product;
 use Illuminate\Http\Request;
 
+use App\Exports\ExportProduct;
+use Maatwebsite\Excel\Facades\Excel;
+
 class AreaController extends Controller
 {
     /**
@@ -40,7 +43,7 @@ class AreaController extends Controller
     {
         $messages = [
             'name.required' => 'Vui lòng nhập tên trại',
-            'name.unique' => 'Tên trại bị trùng! Vui lòng nhập lại!',
+            'name.unique' => 'Tên trại đã tồn tại! Vui lòng nhập lại!',
         ];
 
         $validatedData = $request->validate([
@@ -48,12 +51,8 @@ class AreaController extends Controller
         ],$messages);
 
         $type_area = new Area();
-        $type_area->name = $request->type_area;
-
-        dd($type_area);
-
+        $type_area->name = $request->name;
         $type_area->save();
-
         return redirect('/area')->with('message', 'Thêm thành công');
     }
 
@@ -69,10 +68,10 @@ class AreaController extends Controller
         if (isset($request->date)){
             $date = $request->date;
         }
-
         $area = Area::where('id', $id)->first();
-
-        return view('total', compact('area', 'id', 'date'));
+        $products = Product::where('type_area_id', $id)->where('date_create', $date)->get();
+        $total_price_all = Product::where('type_area_id', $id)->where('date_create', $date)->sum('total_price');
+        return view('total', compact('area', 'id', 'date', 'products', 'total_price_all'));
     }
 
     /**
@@ -110,5 +109,15 @@ class AreaController extends Controller
         $area->delete();
 
         return redirect('/area');
+    }
+
+    /**
+     * Hàm export dùng để xuất ra danh sách tất cả các sinh viên có trong CSDL ra file excel có tên: Danh-sach-sinh-vien.xlsx .
+     */
+
+    public function export(Request $request)
+    {
+        return Excel::download(new ExportProduct($request), 'Bang-ke-nhap-hang-phan-trai-'.$request->name_area_ex.'-ngay-'.$request->date_ex.'.xlsx');
+        return back();
     }
 }

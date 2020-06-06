@@ -13,10 +13,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index( Request $request)
     {
         $areas = Area::all();
-
         return view('product', compact('areas'));
     }
 
@@ -67,9 +66,10 @@ class ProductController extends Controller
         $product->note = $request->note;
         $product->total_price = $product->total*$product->price;
 
-        $product->save();
-
-        return redirect('/product')->with('message', 'Thêm thành công');
+        if($product->save()){
+            return back()->with('message', 'Thêm thành công');
+        }
+        return back()->with('message', $messages);
     }
 
     /**
