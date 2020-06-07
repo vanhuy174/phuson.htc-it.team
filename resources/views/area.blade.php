@@ -30,16 +30,15 @@
                 @foreach($areas as $key => $item)
                     <tr>
                         <td>{{$item->name}}</td>
-                        <td>
-                            {{--                        <form action="area/{{$item->id}}" method="post">--}}
-                            {{--                            @csrf--}}
-                            {{--                            <a href="{{asset("product/".$item->id)}}" class="btn btn-success btn-sm">Quản lý</a>--}}
-                            <a href="{{asset('area/'.$item->id)}}" class="btn btn-success btn-sm">Quản lý</a>
-                            <a href="area/{{$item->id}}" onclick="return confirm('Bạn có chắc chắn muốn xoá không?')"
-                               class="btn btn-danger btn-sm" title="Xóa">Xoá</a>
-                            {{--                            <input type="hidden" name="_method" value="DELETE">--}}
-                            {{--                            <button type="submit" class="btn btn-success">Xóa</button>--}}
-                            {{--                        </form>--}}
+                        <td class="d-flex">
+                            <a href="{{asset('/area/'.$item->id)}}" class="btn btn-success btn-sm mr-2">Quản lý</a>
+                            <form action="{{route('deleteArea', $item->id)}}" method="POST">
+                                <input type="hidden" name="_method" value="DELETE">
+
+                                @csrf
+                                <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xoá không?')"
+                                        class="btn btn-danger btn-sm" title="Xóa">Xóa</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

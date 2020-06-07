@@ -68,9 +68,11 @@ class AreaController extends Controller
         if (isset($request->date)){
             $date = $request->date;
         }
+
         $area = Area::where('id', $id)->first();
         $products = Product::where('type_area_id', $id)->where('date_create', $date)->get();
         $total_price_all = Product::where('type_area_id', $id)->where('date_create', $date)->sum('total_price');
+
         return view('total', compact('area', 'id', 'date', 'products', 'total_price_all'));
     }
 
@@ -92,9 +94,12 @@ class AreaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $id_product)
     {
-        //
+        $product = Product::where('type_area_id', $id)->where('id', $id_product)->first();
+        $product->delete();
+
+        return redirect('area/'.$id);
     }
 
     /**
@@ -108,7 +113,7 @@ class AreaController extends Controller
         $area = Area::findOrFail($id);
         $area->delete();
 
-        return redirect('/area');
+        return redirect('/');
     }
 
     /**

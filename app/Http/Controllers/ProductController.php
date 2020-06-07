@@ -78,9 +78,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $id_product)
     {
-        //
+        $product = Product::where('id', $id_product)->first();
+
+        return view('edit-product', compact('product', 'id'));
     }
 
     /**
@@ -101,9 +103,19 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $id_product)
     {
-        //
+        $product = Product::where('id', $id_product)->first();
+        $product->name = $request->name;
+        $product->type_caculating = $request->type_caculating;
+        $product->total = $request->total;
+        $product->price = $request->price;
+        $product->note = $request->note;
+        $product->total_price = $product->total*$product->price;
+
+        $product->save();
+
+        return redirect('area/'.$id);
     }
 
     /**
@@ -112,8 +124,8 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, $id_product)
     {
-        //
+
     }
 }

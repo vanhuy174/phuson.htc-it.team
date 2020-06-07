@@ -18,10 +18,15 @@ Route::get('/', 'AreaController@index')->middleware('auth');
 Auth::routes();
 
 Route::prefix('/area')->group(function (){
-    Route::get('/', 'AreaController@index')->name('getArea');
+    Route::get('/', 'AreaController@index')->middleware('auth');
     Route::post('/', 'AreaController@store')->name('postArea');
-    Route::get('/{id}', 'AreaController@show')->name('getInfoArea');
-    Route::delete('/{id}', 'AreaController@destroy')->name('postDeleteArea');
+    Route::get('/{id}', 'AreaController@show')->middleware('auth');
+
+    Route::get('/{id}/{id_product}', 'ProductController@show')->middleware('auth');
+    Route::post('/{id}/{id_product}', 'ProductController@update')->name('updateProduct');
+
+    Route::delete('/{id}/{id_product}', 'AreaController@update')->name('deleteProduct');
+    Route::delete('/{id}', 'AreaController@destroy')->name('deleteArea');
     Route::post('export', 'AreaController@export')->name('export');
 });
 
@@ -30,4 +35,4 @@ Route::prefix('/product')->group(function (){
 });
 
 //Route::get('/product', 'ProductController@index')->name('getProduct');
-Route::post('/product', 'ProductController@store')->name('postProduct');
+Route::post('/product', 'ProductController@store')->name('postProduct')->middleware('auth');
