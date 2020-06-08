@@ -101,7 +101,35 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="i1">Tên hàng</label>
-                    <input type="text" name="name" class="form-control" id="i1" required>
+                    <input list="browsers" name="name" class="form-control" id="i1" required>
+                    <datalist id="browsers">
+                        <option value="Gạo">
+                        <option value="Thịt lợn">
+                        <option value="Thịt bò">
+                        <option value="Thịt gà">
+                        <option value="Thịt vịt">
+                        <option value="Giò bò">
+                        <option value="Giò lợn">
+                        <option value="Giò thủ">
+                        <option value="Trứng gà">
+                        <option value="Trứng vịt">
+                        <option value="Cá">
+                        <option value="Tôm">
+                        <option value="Cua">
+                        <option value="Cải bắp">
+                        <option value="Cải xanh">
+                        <option value="Súp lơ">
+                        <option value="Rau muống">
+                        <option value="Bí đỏ">
+                        <option value="Bí đao">
+                        <option value="Cà chua">
+                        <option value="Mướp">
+                        <option value="Mướp đắng">
+                        <option value="Dưa chuột">
+                        <option value="Măng">
+                        <option value="Giá đỗ">
+                        <option value="Đậu phụ">
+                    </datalist>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="i2">Đơn vị tính</label>
