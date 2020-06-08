@@ -25,9 +25,10 @@ Route::prefix('/area')->group(function (){
     Route::get('/{id}/{id_product}', 'ProductController@show')->middleware('auth');
     Route::post('/{id}/{id_product}', 'ProductController@update')->name('updateProduct');
 
-    Route::delete('/{id}/{id_product}', 'AreaController@update')->name('deleteProduct');
+    Route::delete('/{id}/{id_product}', 'ProductController@destroy')->name('deleteProduct');
     Route::delete('/{id}', 'AreaController@destroy')->name('deleteArea');
     Route::post('export', 'AreaController@export')->name('export');
+    Route::post('exportmonth', 'AreaController@exportmonth')->name('exportmonth');
 });
 
 Route::prefix('/product')->group(function (){
@@ -36,3 +37,9 @@ Route::prefix('/product')->group(function (){
 
 //Route::get('/product', 'ProductController@index')->name('getProduct');
 Route::post('/product', 'ProductController@store')->name('postProduct')->middleware('auth');
+
+Route::get('/my-profile', 'ProfileController@index')->middleware('auth');
+Route::post('/my-profile', 'ProfileController@update')->name('updateProfile')->middleware('auth');
+
+Route::get('/create-account', 'ProfileController@index')->middleware('auth');
+

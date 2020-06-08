@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Area;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
@@ -42,7 +43,6 @@ class ProductController extends Controller
             'date_create.required' => 'Không được để trống NGÀY NHẬP',
             'name.required' => 'Không được để trống Tên hàng',
             'type_ca culating.required' => 'Không được để trống Đơn vị tính',
-            'total.required' => 'Không được để trống Số lượng',
         ];
 
         $validatedData = $request->validate([
@@ -51,7 +51,6 @@ class ProductController extends Controller
             'name' => 'required',
             'type_caculating' => 'required',
             'total' => 'required',
-            'price' => 'required',
         ],$messages);
 
 
@@ -62,13 +61,19 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->type_caculating = $request->type_caculating;
         $product->total = $request->total;
-        $product->price = $request->price;
         $product->note = $request->note;
-        $product->total_price = $product->total*$product->price;
-
+        if ($product->price == null){
+            $product->price = null;
+            $product->total_price = null;
+        }else{
+            $product->price = $request->price;
+            $product->total_price = $product->total*$product->price;
+        }
+        
         if($product->save()){
             return back()->with('message', 'Thêm thành công');
         }
+
         return back()->with('message', $messages);
     }
 
@@ -115,7 +120,7 @@ class ProductController extends Controller
 
         $product->save();
 
-        return redirect('area/'.$id);
+        return redirect('area/'.$id.'?date='.$product->created_at->format('yy-m-d'));
     }
 
     /**
@@ -126,6 +131,9 @@ class ProductController extends Controller
      */
     public function destroy($id, $id_product)
     {
+        $product = Product::where('type_area_id', $id)->where('id', $id_product)->first();
+        $product->delete();
 
+        return back()->with('message', 'Xóa thành công');
     }
 }

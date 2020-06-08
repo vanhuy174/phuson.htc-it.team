@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Exports\ExportProduct;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Collection;
 
 class AreaController extends Controller
 {
@@ -16,11 +17,33 @@ class AreaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        isset($request->date) ? $date = $request->date : $date = now()->format('yy-m-d');
         $areas = Area::all();
-
-        return view('area', compact('areas'));
+        $data = Product::where('date_create', $date)->get();
+        $products = [];
+        $i = 0;
+        foreach ($data as $key) {
+            if ($products == null) {
+                $products[$i] = $key;
+                $i++;
+            } else {
+                $check = 0;
+                for ($j = 0; $j < count($products); $j++) {
+                    if ($key->name == $products[$j]['name'] && $key->type_caculating == $products[$j]['type_caculating']) {
+                        $products[$j]['total'] = $products[$j]['total'] + $key->total;
+                        $check = 1;
+                        break;
+                    }
+                }
+                if ($check == 0) {
+                    $products[$i] = $key;
+                    $i++;
+                }
+            }
+        }
+        return view('area', compact('areas', 'products', 'date'));
     }
 
     /**
@@ -36,7 +59,7 @@ class AreaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -48,7 +71,7 @@ class AreaController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|unique:areas',
-        ],$messages);
+        ], $messages);
 
         $type_area = new Area();
         $type_area->name = $request->name;
@@ -59,13 +82,13 @@ class AreaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id, Request $request)
     {
         $date = now()->format('yy-m-d');
-        if (isset($request->date)){
+        if (isset($request->date)) {
             $date = $request->date;
         }
 
@@ -79,7 +102,7 @@ class AreaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -90,22 +113,19 @@ class AreaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $id_product)
+    public function update()
     {
-        $product = Product::where('type_area_id', $id)->where('id', $id_product)->first();
-        $product->delete();
 
-        return redirect('area/'.$id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -117,12 +137,21 @@ class AreaController extends Controller
     }
 
     /**
-     * Hàm export dùng để xuất ra danh sách tất cả các sinh viên có trong CSDL ra file excel có tên: Danh-sach-sinh-vien.xlsx .
+     * Hàm export dùng để xuất ra file excle cas sp trong 1 ngay cua 1 phan trai.
      */
 
     public function export(Request $request)
     {
-        return Excel::download(new ExportProduct($request), 'Bang-ke-nhap-hang-phan-trai-'.$request->name_area_ex.'-ngay-'.$request->date_ex.'.xlsx');
+        return Excel::download(new ExportProduct($request), 'Bang-ke-nhap-hang-phan-trai-' . $request->name_area_ex . '-ngay-' . $request->date_ex . '.xlsx');
+        return back();
+    }
+
+    /**
+     * Hàm export dùng để xuất ra file excle cas sp trong 1 ngay cua tat ca phan trai.
+     */
+    public function exportmonth(Request $request)
+    {dd("gflasjkdfylaskdj");
+        return Excel::download(new ExportProductInMonth($request), 'Bang-ke-nhap-hang-ngay-' . $request->date_ex . '.xlsx');
         return back();
     }
 }

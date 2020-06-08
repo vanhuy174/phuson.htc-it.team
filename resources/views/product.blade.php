@@ -20,7 +20,7 @@
         <table class="table table-bordered container" id="counting_price" name="counting_price">
             <tr>
                 <th>NGÀY NHẬP</th>
-                <th><input type="date" name="date_create" id="date_create" value="{{now()->format('yy-m-d')}}" max="{{now()->format('yy-m-d')}}"></th>
+                <th><input type="date" name="date_create" id="date_create" value="{{now()->format('yy-m-d')}}"></th>
             </tr>
             <tr>
                 <th>Phân trại số</th>
