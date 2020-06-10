@@ -5,25 +5,25 @@
         <form action="{{route('updateProfile')}}" method="POST">
             @csrf
             <fieldset class="p-4 border shadow">
-                <legend>Thông tin cá nhân :</legend>
+                <legend>Thông tin cá nhân</legend>
                 <div class="row mb-2">
-                    <label class="col-3">Họ và Tên* : </label>
+                    <label class="col-3">Họ và Tên: <span style="color: red;">*</span></label>
                     <input class="col-5" type="text" name="name" value="{{auth()->user()->name}}" required>
                 </div>
 
                 <div class="row mb-2">
-                    <label class="col-3">Email* : </label>
+                    <label class="col-3">Email : <span style="color: red;">*</span></label>
                     <input class="col-5" type="email" name="email" value="{{auth()->user()->email}}" required>
                 </div>
 
                 <div class="row mb-2">
                     <label class="col-3">Mật khẩu mới : </label>
-                    <input class="col-5" type="password" name="new_password" value="">
+                    <input class="col-5" type="password" name="new_password" value="" placeholder="Chỉ nhập mật khẩu khi bạn muốn sửa mật khẩu">
                 </div>
 
                 <div class="row mb-2">
                     <label class="col-3">Xác nhận mật mới : </label>
-                    <input class="col-5" type="password" name="confirm_password" value="">
+                    <input class="col-5" type="password" name="confirm_password" value="" placeholder="Chỉ nhập mật khẩu khi bạn muốn sửa mật khẩu">
                 </div>
 
                 <button class="bg-primary p-2 text-white container" type="submit">Lưu thông tin</button>

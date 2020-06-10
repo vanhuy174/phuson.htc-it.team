@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class ExportProductInMonth implements FromView
+class ExportProductInDay implements FromView
 {
     public $requestall;
     public function __construct(Request $request)
@@ -21,11 +21,8 @@ class ExportProductInMonth implements FromView
      */
     public function view(): View
     {
-        isset($this->requestall->month) ? $date = $this->requestall->month : $date = now()->format('yy-m');
-        $m= explode("/", $date)[0];
-        $y= explode("/", $date)[1];
-        $data = Product::whereYear('date_create', $y)->whereMonth('date_create', $m)->get();
-        $ncc = Product::whereYear('date_create', $y)->whereMonth('date_create', $m)->get()->groupBy('supplier');
+        isset($this->requestall->date) ? $date = $this->requestall->date : $date = now()->format('yy-m-d');
+        $data = Product::where('date_create', $date)->get();
         $products = [];
         $i = 0;
         foreach ($data as $key) {
@@ -47,6 +44,6 @@ class ExportProductInMonth implements FromView
                 }
             }
         }
-        return view('ProductExportInMonth', compact( 'date', 'products', 'ncc'));
+        return view('ProductExportInDay', compact( 'date', 'products'));
     }
 }

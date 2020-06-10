@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\Ncc;
 use App\Product;
 use Illuminate\Http\Request;
 
 use App\Exports\ExportProduct;
+use App\Exports\ExportProductInMonth;
+use App\Exports\ExportProductInDay;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Collection;
 
@@ -21,6 +24,7 @@ class AreaController extends Controller
     {
         isset($request->date) ? $date = $request->date : $date = now()->format('yy-m-d');
         $areas = Area::all();
+        $ncc = Product::where('date_create', $date)->get()->groupBy('supplier');
         $data = Product::where('date_create', $date)->get();
         $products = [];
         $i = 0;
@@ -43,7 +47,7 @@ class AreaController extends Controller
                 }
             }
         }
-        return view('area', compact('areas', 'products', 'date'));
+        return view('area', compact('areas', 'products', 'ncc', 'date'));
     }
 
     /**
@@ -75,6 +79,7 @@ class AreaController extends Controller
 
         $type_area = new Area();
         $type_area->name = $request->name;
+        $type_area->discription = $request->discription;
         $type_area->save();
         return redirect('/area')->with('message', 'Thêm thành công');
     }
@@ -87,16 +92,16 @@ class AreaController extends Controller
      */
     public function show($id, Request $request)
     {
-        $date = now()->format('yy-m-d');
         if (isset($request->date)) {
             $date = $request->date;
+        }else{
+            $date = now()->format('yy-m-d');
         }
-
         $area = Area::where('id', $id)->first();
         $products = Product::where('type_area_id', $id)->where('date_create', $date)->get();
         $total_price_all = Product::where('type_area_id', $id)->where('date_create', $date)->sum('total_price');
-
-        return view('total', compact('area', 'id', 'date', 'products', 'total_price_all'));
+        $ncc= Ncc::all();
+        return view('total', compact('area', 'id', 'date', 'products', 'total_price_all','ncc'));
     }
 
     /**
@@ -107,7 +112,8 @@ class AreaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $area = Area::find($id);
+        return view('edit_area', compact('area'));
     }
 
     /**
@@ -117,9 +123,13 @@ class AreaController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update()
+    public function update(Request $request)
     {
-
+        $type_area = Area::find($request->id);
+        $type_area->name = $request->name;
+        $type_area->discription = $request->discription;
+        $type_area->save();
+        return redirect('/area')->with('message', 'Sửa thành công');
     }
 
     /**
@@ -147,11 +157,20 @@ class AreaController extends Controller
     }
 
     /**
-     * Hàm export dùng để xuất ra file excle cas sp trong 1 ngay cua tat ca phan trai.
+     * Hàm export dùng để xuất ra file excle cac sp trong 1 ngay cua tat ca phan trai.
      */
-    public function exportmonth(Request $request)
-    {dd("gflasjkdfylaskdj");
-        return Excel::download(new ExportProductInMonth($request), 'Bang-ke-nhap-hang-ngay-' . $request->date_ex . '.xlsx');
+    public function exportday(Request $request)
+    {
+        return Excel::download(new ExportProductInDay($request), 'Bang-ke-nhap-hang-ngay-' . $request->date_ex . '.xlsx');
+        return back();
+    }
+
+    /**
+     * Hàm export dùng để xuất ra file excle cac sp trong 1 thang cua tat ca phan trai.
+     */
+    public function export_excel_month(Request $request)
+    {
+        return Excel::download(new ExportProductInMonth($request), 'Bang-ke-nhap-hang-thang.xlsx');
         return back();
     }
 }

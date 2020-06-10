@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\Ncc;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -40,6 +41,7 @@ class ProductController extends Controller
     {
         $messages = [
             'type_area_id.required' => 'Không được để trống Phân trại số',
+            'supplier.required' => 'Không được để trống nhà cung cấp',
             'date_create.required' => 'Không được để trống NGÀY NHẬP',
             'name.required' => 'Không được để trống Tên hàng',
             'type_ca culating.required' => 'Không được để trống Đơn vị tính',
@@ -48,16 +50,16 @@ class ProductController extends Controller
         $validatedData = $request->validate([
             'date_create' => 'required',
             'type_area_id' => 'required',
+            'supplier' => 'required',
             'name' => 'required',
             'type_caculating' => 'required',
             'total' => 'required',
         ],$messages);
 
-
-
         $product = new Product();
         $product->date_create = $request->date_create;
         $product->type_area_id = $request->type_area_id;
+        $product->supplier = $request->supplier;
         $product->name = $request->name;
         $product->type_caculating = $request->type_caculating;
         $product->total = $request->total;
@@ -83,11 +85,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $id_product)
+    public function show($id_area, $id_product)
     {
         $product = Product::where('id', $id_product)->first();
-
-        return view('edit-product', compact('product', 'id'));
+        $ncc = Ncc::all();
+        return view('edit-product', compact('product', 'id_area', 'ncc'));
     }
 
     /**
@@ -108,19 +110,22 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $id_product)
+    public function update(Request $request)
     {
-        $product = Product::where('id', $id_product)->first();
+        $product = Product::find($request->id);
         $product->name = $request->name;
+        $product->supplier = $request->supplier;
         $product->type_caculating = $request->type_caculating;
         $product->total = $request->total;
-        $product->price = $request->price;
-        $product->note = $request->note;
-        $product->total_price = $product->total*$product->price;
-
+        if ($request->price == null){
+            $product->price = null;
+            $product->total_price = null;
+        }else{
+            $product->price = $request->price;
+            $product->total_price = $product->total*$product->price;
+        }
         $product->save();
-
-        return redirect('area/'.$id.'?date='.$product->created_at->format('yy-m-d'));
+        return redirect('area/show_area/'.$request->id_area.'?date='.$product->date_create);
     }
 
     /**
@@ -129,9 +134,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, $id_product)
+    public function destroy(Request $request)
     {
-        $product = Product::where('type_area_id', $id)->where('id', $id_product)->first();
+        $product = Product::find($request->id);
         $product->delete();
 
         return back()->with('message', 'Xóa thành công');

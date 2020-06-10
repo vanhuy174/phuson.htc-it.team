@@ -5,11 +5,7 @@
     </tr>
     <tr>
         <th colspan="3" style="text-align: center; font-weight: bold; font-size: 9px;">Đội Hậu Cần - Tài Vụ</th>
-        <th colspan="4" style="text-align: center; font-weight: bold; font-size: 9px;">Tháng: {{$date}}</th>
-    </tr>
-    <tr>
-        <th colspan="3" style="text-align: center; font-weight: bold; font-size: 9px;"></th>
-        <th colspan="4" style="text-align: center; font-weight: bold; font-size: 9px;">Phân trại số: {{$area->name}}</th>
+        <th colspan="4" style="text-align: center; font-weight: bold; font-size: 9px;">Ngày: {{$date}}</th>
     </tr>
 </table>
 <table class="table">
@@ -17,7 +13,7 @@
         <th style="border: 2px solid #000000; width: 9px; font-size: 9px;">Ngày</th>
         <th style="border: 2px solid #000000; width: 20px; font-size: 9px;">Tên hàng hóa</th>
         <th style="border: 2px solid #000000; width: 5px; font-size: 9px;">ĐVT</th>
-        <th style="border: 2px solid #000000; width: 6px; font-size: 9px;">Số lượng</th>
+        <th style="border: 2px solid #000000; width: 7px; font-size: 9px;">Số lượng</th>
         <th style="border: 2px solid #000000; width: 11px; font-size: 9px;">Đơn giá</th>
         <th style="border: 2px solid #000000; width: 13px; font-size: 9px;">Thành tiền</th>
         <th style="border: 2px solid #000000; width: 10px; font-size: 9px;">Ghi chú</th>
