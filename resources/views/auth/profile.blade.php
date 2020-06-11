@@ -26,7 +26,10 @@
                     <input class="col-5" type="password" name="confirm_password" value="" placeholder="Chỉ nhập mật khẩu khi bạn muốn sửa mật khẩu">
                 </div>
 
-                <button class="bg-primary p-2 text-white container" type="submit">Lưu thông tin</button>
+                <div class="row mb-2 pt-3">
+                    <label for="" class="col-3"></label>
+                    <button class="col-5 bg-primary p-2 text-white container m-0" type="submit">Lưu thông tin</button>
+                </div>
             </fieldset>
             @if ($errors->any())
                 <div class="alert alert-danger">

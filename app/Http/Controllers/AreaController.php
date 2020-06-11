@@ -15,6 +15,10 @@ use Illuminate\Support\Collection;
 
 class AreaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -47,6 +51,7 @@ class AreaController extends Controller
                 }
             }
         }
+
         return view('area', compact('areas', 'products', 'ncc', 'date'));
     }
 
@@ -153,6 +158,7 @@ class AreaController extends Controller
     public function export(Request $request)
     {
         return Excel::download(new ExportProduct($request), 'Bang-ke-nhap-hang-phan-trai-' . $request->name_area_ex . '-ngay-' . $request->date_ex . '.xlsx');
+
         return back();
     }
 
@@ -162,6 +168,7 @@ class AreaController extends Controller
     public function exportday(Request $request)
     {
         return Excel::download(new ExportProductInDay($request), 'Bang-ke-nhap-hang-ngay-' . $request->date_ex . '.xlsx');
+
         return back();
     }
 
@@ -171,6 +178,7 @@ class AreaController extends Controller
     public function export_excel_month(Request $request)
     {
         return Excel::download(new ExportProductInMonth($request), 'Bang-ke-nhap-hang-thang.xlsx');
+
         return back();
     }
 }

@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class NccController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -40,6 +44,7 @@ class NccController extends Controller
         $ncc->name = $request->name;
         $ncc->discription = $request->discription;
         $ncc->save();
+        
         return back();
     }
 

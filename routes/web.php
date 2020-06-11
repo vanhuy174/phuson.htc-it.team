@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'AreaController@index')->middleware('auth');
+Route::get('/', 'AreaController@index');
 
 Auth::routes();
 
@@ -43,11 +43,11 @@ Route::prefix('/ncc')->group(function (){
 });
 
     //Route::get('/product', 'ProductController@index')->name('getProduct');
-    Route::post('/product', 'ProductController@store')->name('postProduct')->middleware('auth');
+    Route::post('/product', 'ProductController@store')->name('postProduct');
     Route::post('exportday', 'AreaController@exportday')->name('exportday');
     Route::post('export_excel_month', 'AreaController@export_excel_month')->name('export_excel_month');
-    Route::get('/my-profile', 'ProfileController@index')->middleware('auth');
-    Route::post('/my-profile', 'ProfileController@update')->name('updateProfile')->middleware('auth');
 
-    Route::get('/create-account', 'ProfileController@index')->middleware('auth');
+    Route::get('/my-profile', 'ProfileController@index');
+    Route::post('/my-profile', 'ProfileController@update')->name('updateProfile');
+    Route::get('/create-account', 'ProfileController@index');
 

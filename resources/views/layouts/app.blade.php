@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Trại Phú sơn</title>
+    <title>Trại Giam Phú Sơn</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -27,47 +27,7 @@
                 {{--                <img src="https://w7.pngwing.com/pngs/310/332/png-transparent-computer-icons-home-house-desktop-service-home-blue-logo-room.png" alt="" width="5%" height="auto">--}}
                 Trang chủ
             </a>
-            <a class="navbar-brand" href="{{ url('/ncc') }}">Nhà cung cấp</a>
-            <a class="navbar-brand" href="" data-toggle="modal" data-target="#exampleModal">Xuất Excel</a>
-        {{--            <!-- Right Side Of Navbar -->--}}
-        <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <form action="{{route('export_excel_month')}}" method="post">
-                            @csrf
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Xuất file excel theo tháng</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="i4">Chọn tháng:</label>
-                                </div>
-                                <div class="container">
-                                    <div class="col-sm-12" style="height:130px;">
-                                        <div class="form-group">
-                                            <div class='input-group date' id='datetimepicker10'>
-                                                <input type='text' class="form-control" name="month"/>
-                                                <span class="input-group-addon">
-                                                    <i class="btn btn-success">Chọn tháng</i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                <button type="submit" class="btn btn-primary">Tải xuống</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+
             <!-- Authentication Links -->
             @guest
                 {{--                            <li class="nav-item">--}}
@@ -79,6 +39,47 @@
                 {{--                                                        </li>--}}
                 {{--                                                    @endif--}}
             @else
+                <a class="navbar-brand" href="{{ url('/ncc') }}">Nhà cung cấp</a>
+                <a class="navbar-brand" href="" data-toggle="modal" data-target="#exampleModal">Xuất Excel</a>
+                {{--            <!-- Right Side Of Navbar -->--}}
+            <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <form action="{{route('export_excel_month')}}" method="post">
+                                @csrf
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Xuất file excel theo tháng</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="i4">Chọn tháng:</label>
+                                    </div>
+                                    <div class="container">
+                                        <div class="col-sm-12" style="height:130px;">
+                                            <div class="form-group">
+                                                <div class='input-group date' id='datetimepicker10'>
+                                                    <input type='text' class="form-control" name="month"/>
+                                                    <span class="input-group-addon">
+                                                    <i class="btn btn-success">Chọn tháng</i>
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <button type="submit" class="btn btn-primary">Tải xuống</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
